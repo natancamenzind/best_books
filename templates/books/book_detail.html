@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ book.title }} ({{ book.author }})</title>
+</head>
+<body>
+
+<h1>{{ book.title }} ({{ book.author }})</h1>
+<div>
+    {{ book.description }}
+</div>
+<hr>
+{% for comment in book.comments.all %}
+    <div>
+        {{ comment.content }}
+        <h4>
+            ~ {{ comment.author }}
+        </h4>
+    </div>
+{% endfor %}
+
+<a href="{% url 'add-book-comment' book.pk %}">Dodaj komentarz</a>
+
+
+</body>
+</html>

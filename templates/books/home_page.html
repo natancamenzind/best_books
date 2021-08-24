@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Strona główna</title>
+</head>
+<body>
+<h1>Best Books!</h1>
+<div>
+    {% for book in books %}
+        <a href="{% url 'book_detail' book.pk %}">{{ book.title }}</a>
+    {% endfor %}
+</div>
+<div>
+    {% for author in authors %}
+        <a href="{% url 'author_detail' author.pk %}">{{ author }}</a>
+    {% endfor %}
+</div>
+</body>
+</html>

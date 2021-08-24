@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dodaj komentarz do {{ book.title }}</title>
+</head>
+<body>
+<h1>Skomentuj {{ book.title }}</h1>
+<form method="post" action="{% url 'add-book-comment' book.id %}">
+    {% csrf_token %}
+    <label>Autor:
+        <input type="text" name="kto_to_napisal_w_ogole">
+    </label>
+    <label>Komentarz:
+        <input type="text" name="content">
+    </label>
+    <input type="submit" value="Skomentuj">
+</form>
+
+</body>
+</html>
