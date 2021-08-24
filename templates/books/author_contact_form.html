@@ -5,7 +5,7 @@
     <title>Formularz kontaktowy</title>
 </head>
 <body>
-    <h1>Formularz kontaktowy do autora</h1>
+    <h1>Formularz kontaktowy do autora {{ author }}</h1>
     <form action="" method="post">
         {% csrf_token %}
         {{ form.as_p }}

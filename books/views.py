@@ -1,3 +1,5 @@
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 
@@ -8,7 +10,7 @@ from django.views.generic import \
     ListView, DetailView, TemplateView, \
     FormView
 
-from books.forms import ContactForm, AuthorContactForm
+from books.forms import ContactForm, AuthorContactForm, LoginForm
 from books.models import Author, Book, BookComment
 
 
@@ -20,7 +22,6 @@ class AuthorListView(ListView):
 class AuthorDetailView(DetailView):
     model = Author
     template_name = 'books/author_detail.html'
-    pk_url_kwarg = 'numer_ajdi_autora'
 
     def get_context_data(self, **kwargs):
         context = super(AuthorDetailView, self).get_context_data(**kwargs)
@@ -74,10 +75,15 @@ class ContactView(FormView):
         return super().form_valid(form)
 
 
-class AuthorContactView(FormView):
+class AuthorContactView(LoginRequiredMixin, FormView):
     form_class = AuthorContactForm
     template_name = 'books/author_contact_form.html'
     success_url = reverse_lazy('mail-send')
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['author'] = Author.objects.get(pk=self.kwargs.get('pk'))
+        return ctx
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -91,3 +97,32 @@ class AuthorContactView(FormView):
 
 class MailSendView(TemplateView):
     template_name = 'books/mail_send.html'
+
+
+class LoginView(FormView):
+    form_class = LoginForm
+    template_name = 'books/login.html'
+    success_url = '/'
+
+    def form_valid(self, form):
+        user = authenticate(
+            self.request,
+            username=form.cleaned_data['username'],
+            password=form.cleaned_data['password'],
+        )
+        if user is not None:
+            login(self.request, user)
+            if self.request.GET.get('next'):
+                return HttpResponseRedirect(self.request.GET.get('next'))
+            return HttpResponseRedirect('/')
+        else:
+            return HttpResponseRedirect(f"{reverse('login')}?next={self.request.GET.get('next')}")
+
+
+class RegisterView(FormView):
+    form_class = ...
+    template_name = ...
+    success_url = ...
+
+    def form_valid(self, form):
+        ...

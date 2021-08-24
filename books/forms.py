@@ -40,3 +40,8 @@ class AuthorContactForm(forms.Form):
             from_email='no-replay@mojastrona.pl',
             recipient_list=[f'{author.first_name}_{author.last_name}@bestbooks.pl'],
         )
+
+
+class LoginForm(forms.Form):
+    username = forms.CharField(label='login')
+    password = forms.CharField(label='password', widget=forms.PasswordInput)

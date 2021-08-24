@@ -27,4 +27,5 @@ urlpatterns = [
     path('contact/', views.ContactView.as_view(), name='contact-view'),
     path('contact-author/<int:pk>/', views.AuthorContactView.as_view(), name='author-contact-view'),
     path('mail-send/', views.MailSendView.as_view(), name='mail-send'),
+    path('login/', views.LoginView.as_view(), name='login'),
 ]
